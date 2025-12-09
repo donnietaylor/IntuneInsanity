@@ -245,6 +245,7 @@ function Get-IntunePolicy {
                     $policy = $response
                     $policy | Add-Member -NotePropertyName 'PolicyType' -NotePropertyValue $type -Force
                     $policies += $policy
+                    Write-Host "Retrieved policy: $($policy.displayName)" -ForegroundColor Cyan
                 } else {
                     # Multiple policies
                     if ($response.value) {
@@ -252,10 +253,9 @@ function Get-IntunePolicy {
                             $policy | Add-Member -NotePropertyName 'PolicyType' -NotePropertyValue $type -Force
                             $policies += $policy
                         }
+                        Write-Host "Retrieved $($response.value.Count) $($endpoints[$type].Name)" -ForegroundColor Cyan
                     }
                 }
-
-                Write-Host "Retrieved $($response.value.Count) $($endpoints[$type].Name)" -ForegroundColor Cyan
             }
 
             return $policies
@@ -512,13 +512,13 @@ function ConvertTo-IntuneTargetPolicy {
     $targetPolicy = $SourcePolicy | ConvertTo-Json -Depth 10 | ConvertFrom-Json
 
     # Remove read-only properties that cannot be set during creation
+    # Note: Keep '@odata.type' for App Protection Policies as it's required for subtypes
     $readOnlyProperties = @(
         'id',
         'createdDateTime',
         'lastModifiedDateTime',
         'version',
-        '@odata.context',
-        '@odata.type'
+        '@odata.context'
     )
 
     foreach ($prop in $readOnlyProperties) {
