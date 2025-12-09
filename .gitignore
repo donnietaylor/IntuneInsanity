@@ -1,0 +1,30 @@
+# Backup directories
+IntuneBackup/
+Backup/
+*.backup
+
+# Sensitive files
+*secret*
+*credential*
+*.key
+
+# PowerShell temporary files
+*.tmp
+*.temp
+
+# Log files
+*.log
+
+# Test results
+TestResults/
+
+# IDE and editor files
+.vscode/
+.vs/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
